@@ -3,12 +3,18 @@ const mongoose = require('mongoose');
 const carSchema = new mongoose.Schema({
   name: {
     type: String,
+    required: [true, 'name is required'],
   },
   year: {
     type: String,
   },
-  manufacturer: {
+  image: {
     type: String,
+  },
+  manufacturer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Manufacturer',
+    required: [true, 'manufacturer is required'],
   },
 });
 

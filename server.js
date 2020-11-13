@@ -17,7 +17,7 @@ server.listen(port, () => {
 // Unhandled Promise Rejection handler
 process.on('unhandledRejection', (error) => {
   logger.info('UNHANDLED REJECTION! 💥 Shutting down...');
-  logger.error(`${error.name}: ${error.message}`);
+  logger.error(error.name, error.message);
   server.close(() => {
     process.exit(1);
   });
