@@ -2,6 +2,7 @@ const Car = require('../models/carModel');
 const Manufacturer = require('../models/manufacturerModel');
 const catchAsync = require('../utils/catchAsync');
 const uploadToCloudinary = require('../utils/cloudinaryUpload');
+const AppError = require('../utils/appError');
 
 const getAllCar = catchAsync(async (req, res, next) => {
   const cars = await Car.find({}).populate('manufacturer', {
@@ -30,16 +31,12 @@ const createCar = catchAsync(async (req, res, next) => {
 
   // if manufacturer is not exist, return error
   if (!returnedManufacturer) {
-    return res.status(404).json({
-      status: 'fail',
-    });
+    return next(new AppError('No manufacturer found with that name', 404));
   }
 
   // car image file is required otherwise return error
   if (!req.files) {
-    return res.status(404).json({
-      status: 'fail',
-    });
+    return next(new AppError('Car image is required', 400));
   }
 
   // validate data and create new car
@@ -81,9 +78,7 @@ const deleteCar = catchAsync(async (req, res, next) => {
 
   // if car is not exist, return error
   if (!deletedCar) {
-    return res.status(404).json({
-      status: 'fail',
-    });
+    return next(new AppError('No car found with that Id', 404));
   }
 
   // response

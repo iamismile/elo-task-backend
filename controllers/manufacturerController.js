@@ -1,6 +1,7 @@
 const Manufacturer = require('../models/manufacturerModel');
 const catchAsync = require('../utils/catchAsync');
 const uploadToCloudinary = require('../utils/cloudinaryUpload');
+const AppError = require('../utils/appError');
 
 const getAllManufacturers = catchAsync(async (req, res, next) => {
   // set queryObj for country wise query
@@ -57,9 +58,7 @@ const deleteManfacturer = catchAsync(async (req, res, next) => {
 
   // if manufacturer is not exist, return error
   if (!deletedManufacturer) {
-    return res.status(404).json({
-      status: 'fail',
-    });
+    return next(new AppError('No manufacturer found with that Id', 404));
   }
 
   // response

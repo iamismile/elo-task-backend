@@ -9,7 +9,9 @@ const errorController = require('./controllers/errorController.js');
 const app = express();
 
 // Request logger
-app.use(morgan('dev'));
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
 
 // Body parser, reading data from body and attached into req.body
 app.use(express.json());
@@ -20,6 +22,7 @@ app.use(
   })
 );
 
+// app routes
 app.use('/api/v1/cars', carsRouter);
 app.use('/api/v1/manufacturers', manufacturersRouter);
 
