@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const middleware = require('./utils/middleware');
 const carsRouter = require('./routes/carRoutes');
@@ -8,13 +9,14 @@ const errorController = require('./controllers/errorController.js');
 
 const app = express();
 
-// Request logger
+// GLOBAL MIDDLEWARES
+app.use(cors()); // implement cors
+app.options('*', cors());
 if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
+  app.use(morgan('dev')); // request logger
 }
-
-// Body parser, reading data from body and attached into req.body
-app.use(express.json());
+app.use(express.json()); // parse data from client
+// configure file upload
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -26,10 +28,10 @@ app.use(
 app.use('/api/v1/cars', carsRouter);
 app.use('/api/v1/manufacturers', manufacturersRouter);
 
-// Unknown endpoint handler
+// unknown endpoint handler
 app.use(middleware.unknownEndpoint);
 
-// Global error handler
+// global error handler
 app.use(errorController);
 
 module.exports = app;

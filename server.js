@@ -4,6 +4,13 @@ const config = require('./utils/config');
 const app = require('./app');
 const connectDB = require('./utils/db');
 
+// Uncaught exception handler
+process.on('uncaughtException', (err) => {
+  logger.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  logger.log(err.name, err.message);
+  process.exit(1);
+});
+
 const server = http.createServer(app);
 
 // Connect Database
