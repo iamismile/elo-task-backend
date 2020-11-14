@@ -1,7 +1,7 @@
-const unknownEndpoint = (req, res) => {
-  res
-    .status(404)
-    .json({ error: `Cannot find '${req.originalUrl}' on this server.` });
+const AppError = require('./appError');
+
+const unknownEndpoint = (req, res, next) => {
+  next(new AppError(`Can't find '${req.originalUrl}' on this server!`, 404));
 };
 
 module.exports = {
